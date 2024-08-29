@@ -1,0 +1,12 @@
+matplotlib==3.8.4
+moviepy==1.0.3
+opencv_contrib_python==4.6.0.66
+opencv_python==4.6.0.66
+opencv_python_headless==4.9.0.80
+paddleocr==2.7.3
+paddleocr.egg==info
+pysrt==1.1.2
+PyYAML==6.0.1
+torch==2.2.2
+torchvision==0.17.2
+tqdm==4.66.2

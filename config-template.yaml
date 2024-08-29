@@ -1,0 +1,25 @@
+# 视频文件相关配置
+video:
+  width_delta: 0.05 # 宽度冗余
+  height_delta: 0.02 # 高度冗余
+  groups_tolerance: 20 # 允许的组内差值，计算字幕中心和高度用
+  min_duration: 0.1 # 最小字幕持续时间，单位秒
+
+# OCR 识别配置
+ocr:
+  lang: "ch" # OCR 识别语言
+  det_model_dir: "./models/ch_PP-OCRv4_det_server_infer" # OCR 检测模型
+  rec_model_dir: "./models/ch_PP-OCRv4_rec_server_infer" # OCR 识别模型
+
+# 字幕翻译配置
+erase:
+  ckpt_p: "./models/sttn.pth" # STTN 模型
+  max_frame_length: 80 # 单次处理帧最大长度
+  min_frame_length: 20 # 单次处理帧最小长度
+  neighbor_stride: 10 # 邻居帧步长
+
+# 字幕翻译配置
+translation:
+  model: "gpt-4o-mini"
+  api_key: "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  api_base_url: "https://api.chatanywhere.com.cn/v1"
