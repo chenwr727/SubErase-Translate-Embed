@@ -3,7 +3,9 @@ from moviepy.editor import CompositeVideoClip, TextClip, VideoFileClip
 from pysrt.srtfile import SubRipFile, SubRipItem
 
 
-def create_subclip(sub: SubRipItem, fontsize: int, y_center: int, font: str):
+def create_subclip(
+    sub: SubRipItem, fontsize: int, position: int, font: str, font_color: str
+):
     """
     根据字幕项生成视频字幕片段。
 
@@ -14,8 +16,9 @@ def create_subclip(sub: SubRipItem, fontsize: int, y_center: int, font: str):
     参数:
     - sub: SubRipItem类型，包含字幕的开始时间、结束时间和文本内容。
     - fontsize: int类型，字幕的字体大小。
-    - y_center: int类型，字幕在视频中的垂直中心位置（像素值）。
+    - position: int类型，字幕在视频中的垂直中心位置（像素值）。
     - font: str类型，字幕所使用的字体。
+    - font_color: str类型，字幕的字体颜色。
 
     返回:
     - TextClip类型，生成的字幕片段对象。
@@ -26,11 +29,11 @@ def create_subclip(sub: SubRipItem, fontsize: int, y_center: int, font: str):
         sub.text,
         fontsize=fontsize,
         font=font,
-        color="white",
+        color=font_color,
         stroke_color="black",
         stroke_width=1,
     )
-    txtclip = txtclip.set_pos(("center", y_center - txtclip.size[1] // 2))
+    txtclip = txtclip.set_pos(("center", position - txtclip.size[1] // 2))
     return txtclip.set_start(start_time).set_duration(end_time - start_time)
 
 
@@ -129,9 +132,7 @@ def embed_subtitles(
     srt_path: str,
     y_center: int,
     output_file: str,
-    language: str,
-    target_subtitle_width_ratio: float = 0.8,
-    target_size: int = 30,
+    config: dict,
 ):
     """
     向视频添加字幕。
@@ -140,25 +141,33 @@ def embed_subtitles(
     :param srt_path: 字幕文件的路径，格式为SRT。
     :param y_center: 字幕垂直位置的Y坐标，表示字幕垂直居中位置的中心线。
     :param output_file: 输出带有字幕的视频文件的路径。
-    :param language: 字幕的语言，用于选择合适的字体。
-    :param target_subtitle_width_ratio: 字幕宽度与视频宽度的比例，默认为0.8。
-    :param target_size: 输出文件的目标大小，默认为30M。
+    :param config: 配置参数，包括目标字幕宽度比例、目标文件大小等。
     """
     video_clip = VideoFileClip(video_path)
     video_width = video_clip.size[0]
 
-    font = get_font(language)
+    font = config["subtitle"]["font"]
 
-    target_subtitle_width = int(video_width * target_subtitle_width_ratio)
-    fontsize = estimate_font_size(target_subtitle_width)
+    fontsize = config["subtitle"]["font_size"]
+    if fontsize == 0:
+        target_subtitle_width = int(video_width * config["subtitle"]["width_ratio"])
+        fontsize = estimate_font_size(target_subtitle_width)
 
     subs = pysrt.open(srt_path)
     subs = wrap_subtitle_text(subs, fontsize, target_subtitle_width, font)
 
-    subclips = [create_subclip(sub, fontsize, y_center, font) for sub in subs]
+    position = config["subtitle"]["position"]
+    if position == 0:
+        position = y_center
+    font_color = config["subtitle"]["font_color"]
+    subclips = [
+        create_subclip(sub, fontsize, position, font, font_color) for sub in subs
+    ]
     final_clip = CompositeVideoClip([video_clip] + subclips)
 
-    target_bitrate = (target_size * 8 * 1024 * 1024) / video_clip.duration / 1024
+    target_bitrate = (
+        (config["output"]["target_size"] * 8 * 1024 * 1024) / video_clip.duration / 1024
+    )
     final_clip.write_videofile(
         output_file,
         codec="libx264",

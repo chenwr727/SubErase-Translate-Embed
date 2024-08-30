@@ -11,11 +11,12 @@ ocr:
   det_model_dir: "./models/ch_PP-OCRv4_det_server_infer" # OCR 检测模型
   rec_model_dir: "./models/ch_PP-OCRv4_rec_server_infer" # OCR 识别模型
 
-# 字幕翻译配置
+# 字幕擦除配置
 erase:
   ckpt_p: "./models/sttn.pth" # STTN 模型
   max_frame_length: 80 # 单次处理帧最大长度
   min_frame_length: 20 # 单次处理帧最小长度
+  mask_expand: 20 # 掩膜外扩的像素数。
   neighbor_stride: 10 # 邻居帧步长
 
 # 字幕翻译配置
@@ -23,3 +24,15 @@ translation:
   model: "gpt-4o-mini"
   api_key: "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
   api_base_url: "https://api.chatanywhere.com.cn/v1"
+
+# 字幕处理配置
+subtitle:
+  font: "./fonts/arialbd.ttf" # 字幕字体
+  font_size: 0 # 翻译后字幕的字体大小，如24，为0则使用理论计算大小
+  font_color: "#FFFFFF" # 字幕字体颜色，例如白色
+  position: 0 # 字幕位置，高度的百分比，例如0.66，为0则为原字幕位置
+  width_ratio: 0.8 # 字幕宽度与视频宽度的比例，用于计算字体大小
+
+# 视频输出配置
+output:
+  target_size: 30 # 输出视频大小，单位MB

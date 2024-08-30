@@ -63,15 +63,14 @@ def main():
     # 将翻译后的字幕嵌入视频
     update_status("Embed: embedding subtitles...")
     output_file = f"{file_name}_{args.language}{ext}"
-    embed_subtitles(output_path, srt_lang_path, y_center, output_file, args.language)
+    embed_subtitles(output_path, srt_lang_path, y_center, output_file, config)
 
     if args.delete:
         if os.path.exists(file_name):
             shutil.rmtree(file_name)
             update_status("Temporary request directory {} deleted".format(file_name))
-        update_status(f"Done! {args.video}")
-    else:
-        update_status(f"Failed! {args.video}")
+        
+    update_status(f"Done! {args.video}")
 
 
 if __name__ == "__main__":

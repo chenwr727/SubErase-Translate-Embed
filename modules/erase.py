@@ -99,6 +99,7 @@ def extract_mask(
     frame_len: int,
     max_frame_length: int,
     min_frame_length: int,
+    mask_expand: int = 20,
 ):
     """
     根据掩膜结果提取连续帧的路径、图像和掩膜信息。
@@ -108,6 +109,7 @@ def extract_mask(
     :param frame_len: 视频的帧长度。
     :param max_frame_length: 最大帧长度。
     :param min_frame_length: 最小帧长度。
+    :param mask_expand: 掩膜外扩的像素数。
     :return: 一个包含三个列表的元组，分别包含每组连续帧的路径、图像和掩膜信息。
     """
 
@@ -141,8 +143,8 @@ def extract_mask(
         xwidth = min(xmin, width_ - xmax)
         cv2.rectangle(
             mask,
-            (max(0, xwidth - 30), ymin - 30),
-            (min(width_ - xwidth + 30, width_ - 1), ymax + 30),
+            (max(0, xwidth - mask_expand), ymin - mask_expand),
+            (min(width_ - xwidth + mask_expand, width_ - 1), ymax + mask_expand),
             (255, 255, 255),
             thickness=-1,
         )
@@ -199,6 +201,7 @@ def remove_subtitles(ocr_result: dict, fps: float, frame_len: int, config: dict)
         frame_len,
         config["erase"]["max_frame_length"],
         config["erase"]["min_frame_length"],
+        config["erase"]["mask_expand"],
     )
     results = inpaint_video(
         paths_list,
