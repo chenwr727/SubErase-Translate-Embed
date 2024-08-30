@@ -1,8 +1,12 @@
+English | [简体中文](README_CN.md)
+
 # SubErase-Translate-Embed
 
-## 项目简介
+## Project Overview
 
-SubErase-Translate-Embed 是一个开源工具，利用 OCR 技术识别短剧中的字幕，自动擦除原有字幕，并将翻译后的字幕嵌入到视频中。旨在提升多语言视频内容的可访问性，方便用户体验不同语言版本的短剧。
+**SubErase-Translate-Embed** is an open-source tool designed to enhance the accessibility of multilingual video content. By integrating OCR technology, subtitle erasure, translation, and embedding functions, this tool automatically processes subtitles in short films, enabling users to easily experience short film content in different languages.
+
+This project provides a one-stop solution for users who wish to translate videos into multiple languages and re-embed the subtitles. It is widely applicable in scenarios such as multilingual education, international film production, and global audience entertainment experiences.
 
 <table>
   <tr>
@@ -10,7 +14,7 @@ SubErase-Translate-Embed 是一个开源工具，利用 OCR 技术识别短剧�
       <img src="./images/0072.png" alt="Demo Image">
     </td>
     <td>
-      <img src="./images/0072_English.png" alt="Translate Image">
+      <img src="./images/0072_English.png" alt="Translated Image">
     </td>
   </tr>
   <tr>
@@ -18,46 +22,59 @@ SubErase-Translate-Embed 是一个开源工具，利用 OCR 技术识别短剧�
       <img src="./images/0084.png" alt="Demo Image">
     </td>
     <td>
-      <img src="./images/0084_English.png" alt="Translate Image">
+      <img src="./images/0084_English.png" alt="Translated Image">
     </td>
   </tr>
 </table>
 
-## 功能
+## Key Features
 
-- 识别视频中的字幕，paddleocr
-- 擦除原字幕，sttn
-- 翻译字幕到目标语言，chatgpt
-- 将翻译后的字幕嵌入到视频中，moviepy
+- **Subtitle Recognition**: Uses OCR technology (based on PaddleOCR) to extract subtitles from videos.
+- **Subtitle Erasure**: Automatically erases the original subtitles in the video using STTN (Spatio-Temporal Trajectory Network).
+- **Subtitle Translation**: Utilizes OpenAI's ChatGPT API or other translation services to translate the extracted subtitles into the target language.
+- **Subtitle Embedding**: Re-embeds the translated subtitles into the video, generating a new multilingual version.
 
-## 安装
+## Installation Guide
 
-1. 克隆项目：
+To use SubErase-Translate-Embed, follow these steps:
+
+1. **Clone the project code**:
     ```bash
     git clone https://github.com/chenwr727/SubErase-Translate-Embed.git
     ```
 
-2. 安装依赖：
+2. **Install dependencies**:
     ```bash
     pip install -r requirements.txt
     ```
 
-3. 配置文件：
+3. **Download models**:
+    - [PaddleOCR](https://paddleocr.bj.bcebos.com/PP-OCRv4/chinese/ch_PP-OCRv4_det_server_infer.tar)
+    - [STTN](https://drive.google.com/file/d/1ZAMV8547wmZylKRt5qR_tC5VlosXD4Wv/view?usp=sharing)
+
+4. **Configuration**:
     ```bash
     cp config-template.yaml config.yaml
     ```
 
-## 使用方法
+## Usage
+
+Execute video processing with the following command, automatically recognizing, erasing, translating, and embedding subtitles:
 
 ```bash
 python main.py --video input_video.mp4 --language English
 ```
-其中 `input_video.mp4` 是你的视频文件名，`en` 是目标翻译语言代码。
+Where `input_video.mp4` is the name of your video file, and `English` is the target translation language.
 
-## 参考
+## Project Structure
+
+- **main.py**: The main program entry point, responsible for managing the entire processing workflow.
+- **modules/**: Contains various functional modules (OCR, subtitle erasure, translation, embedding).
+- **utils/**: Contains general tools, such as logging and video processing utilities.
+- **config.yaml**: Configuration file for setting language, video format, and other parameters.
+
+## References
 
 - [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
 - [STTN](https://github.com/researchmm/STTN)
-- [ChatGPT](https://chat.openai.com/)
-- [MoviePy](https://zulko.github.io/moviepy/)
 - [video-subtitle-remover](https://github.com/YaoFANGUK/video-subtitle-remover)
