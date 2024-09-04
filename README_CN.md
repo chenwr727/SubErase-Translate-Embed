@@ -8,24 +8,7 @@
 
 本项目为希望将视频翻译成多种语言并重新嵌入字幕的用户提供了一站式解决方案，广泛应用于多语言教学、国际化影视制作、全球观众娱乐体验等场景。
 
-<table>
-  <tr>
-    <td>
-      <img src="./images/0072.png" alt="演示图像">
-    </td>
-    <td>
-      <img src="./images/0072_English.png" alt="翻译后的图像">
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="./images/0084.png" alt="演示图像">
-    </td>
-    <td>
-      <img src="./images/0084_English.png" alt="翻译后的图像">
-    </td>
-  </tr>
-</table>
+![Demo](demo.webp)
 
 ## 主要功能
 

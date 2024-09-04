@@ -8,24 +8,7 @@ English | [简体中文](README_CN.md)
 
 This project provides a one-stop solution for users who wish to translate videos into multiple languages and re-embed the subtitles. It is widely applicable in scenarios such as multilingual education, international film production, and global audience entertainment experiences.
 
-<table>
-  <tr>
-    <td>
-      <img src="./images/0072.png" alt="Demo Image">
-    </td>
-    <td>
-      <img src="./images/0072_English.png" alt="Translated Image">
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="./images/0084.png" alt="Demo Image">
-    </td>
-    <td>
-      <img src="./images/0084_English.png" alt="Translated Image">
-    </td>
-  </tr>
-</table>
+![Demo](demo.webp)
 
 ## Key Features
 

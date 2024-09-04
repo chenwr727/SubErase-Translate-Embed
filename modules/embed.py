@@ -30,8 +30,6 @@ def create_subclip(
         fontsize=fontsize,
         font=font,
         color=font_color,
-        stroke_color="black",
-        stroke_width=1,
     )
     txtclip = txtclip.set_pos(("center", position - txtclip.size[1] // 2))
     return txtclip.set_start(start_time).set_duration(end_time - start_time)
