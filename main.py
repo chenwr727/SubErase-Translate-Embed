@@ -58,7 +58,7 @@ def main():
 
     # 翻译字幕
     update_status("Translate: translating subtitles...")
-    srt_lang_path = translate_subtitles(srt_path, args.language, config)
+    srt_lang_path = translate_subtitles(srt_path, args.language)
 
     # 将翻译后的字幕嵌入视频
     update_status("Embed: embedding subtitles...")

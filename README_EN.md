@@ -61,3 +61,4 @@ Where `input_video.mp4` is the name of your video file, and `English` is the tar
 - [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
 - [STTN](https://github.com/researchmm/STTN)
 - [video-subtitle-remover](https://github.com/YaoFANGUK/video-subtitle-remover)
+- [translation-agent](https://github.com/andrewyng/translation-agent.git)

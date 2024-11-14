@@ -61,3 +61,4 @@ python main.py --video input_video.mp4 --language English
 - [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
 - [STTN](https://github.com/researchmm/STTN)
 - [video-subtitle-remover](https://github.com/YaoFANGUK/video-subtitle-remover)
+- [translation-agent](https://github.com/andrewyng/translation-agent.git)

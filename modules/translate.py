@@ -1,65 +1,26 @@
 import time
+
 import pysrt
-from openai import OpenAI
+
+from utils.translation_utils import translate_text
 
 
-def chatgpt_translate(text: str, language: str, config: dict):
+def chatgpt_translate(text: str, language: str):
     """
     使用ChatGPT模型翻译字幕文本。
 
     参数:
     - text: str，需要翻译的字幕文本。
     - language: str，目标翻译语言，如"English"。
-    - config: dict，包含API密钥、基础URL、模型名称等配置信息的字典。
 
     返回:
     - str，翻译后的字幕文本或错误信息。
     """
-    messages = [
-        {
-            "role": "system",
-            "content": f"""# Character
-You are a professional in the realm of subtitle translation, renowned for proficiently converting Chinese to {language} subtitles. Your main responsibility is to decipher the provided subtitle text into {language}, strictly preserving the original line numbers. Other than the numbered sequences and timestamps of the subtitles, everything else should be translated. Meticulously ensuring the flawless timing of the subtitles is your prime concern.
-
-## Skills
-
-### Skill 1: Mastery in Subtitle Translation 
-- Maintain the original subtitle sequence and timestamp while translating the textual content of each subtitle.
-- Effectively translate Chinese names into corresponding equivalents in {language}.
-
-### Skill 2: Consistency Preservation 
-- Guarantee that the row count of the translated subtitles matches perfectly with the original ensuring accurate synchronization with the video or other media content.
-
-### Skill 3: Language Expertise 
-- Provide translations that grammatically accurate, culturally sensitive and fluid in {language}.
-
-### Skill 4: Special Terminology Management 
-- Render any particular terms or idioms present in the original subtitle into their equivalent expressions in {language}, making apt adaptations when required.
-
-### Skill 5: Timing Precision 
-- Maintain the temporal coordination of the subtitles to ensure the translated versions appear at the exact instances as set in the original content.
-
-## Constraints
-- Concentrate only on tasks related to the translation of subtitles.
-- Always preserve the sequence and timestamp of the subtitles. 
-- Translate subtitles individually without merging them.
-- The translated subtitles must synchronize perfectly with the corresponding video or other media content.""",
-        },
-        {"role": "user", "content": f"{text}"},
-    ]
-
-    client = OpenAI(
-        api_key=config["api_key"],
-        base_url=config["api_base_url"],
-    )
-    model = config["model"]
-
     content = ""
     try:
-        completion = client.chat.completions.create(
-            model=model, messages=messages, timeout=300
+        content = translate_text(
+            source_lang="Chinese", target_lang=language, source_text=text
         )
-        content = completion.choices[0].message.content.strip()
     except Exception as e:
         print(f"chatgpt translate error:" + str(e))
     return content
@@ -92,9 +53,7 @@ def check_timeline(srt, new_srt_text):
     return True
 
 
-def translate_subtitles(
-    srt_path: str, target_language: str, config: dict, try_times: int = 5
-):
+def translate_subtitles(srt_path: str, target_language: str, try_times: int = 5):
     """
     将字幕翻译成目标语言并保存。
 
@@ -103,7 +62,6 @@ def translate_subtitles(
 
     :param srt_path: 字幕文件的路径。
     :param target_language: 目标语言代码，用于翻译。
-    :param config: 配置字典，包含翻译 API 相关的配置信息。
     :param try_times: 重试次数，默认为 5 次。
     :return: 翻译后字幕文件的路径。
     """
@@ -114,9 +72,7 @@ def translate_subtitles(
 
     lines = len(subtitles.split("\n"))
     for i in range(try_times):
-        translated_subtitles = chatgpt_translate(
-            subtitles, target_language, config["translation"]
-        )
+        translated_subtitles = chatgpt_translate(subtitles, target_language)
         if translated_subtitles:
             if len(translated_subtitles.strip().split("\n")) != lines:
                 print(f"chatgpt translate lines not match, try again! {i + 1}")
