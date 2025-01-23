@@ -23,7 +23,9 @@
 
 1. **克隆项目代码**：
     ```bash
-    git clone --recursive https://github.com/chenwr727/SubErase-Translate-Embed.git
+    git clone https://github.com/chenwr727/SubErase-Translate-Embed.git
+    cd SubErase-Translate-Embed
+    git clone https://github.com/researchmm/STTN.git
     ```
 
 2. **安装依赖包**：

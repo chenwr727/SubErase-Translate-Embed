@@ -23,7 +23,9 @@ To use SubErase-Translate-Embed, follow these steps:
 
 1. **Clone the project code**:
     ```bash
-    git clone --recursive https://github.com/chenwr727/SubErase-Translate-Embed.git
+    git clone https://github.com/chenwr727/SubErase-Translate-Embed.git
+    cd SubErase-Translate-Embed
+    git clone https://github.com/researchmm/STTN.git
     ```
 
 2. **Install dependencies**:
