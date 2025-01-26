@@ -1,3 +1,4 @@
+import os
 import time
 
 import pysrt
@@ -65,10 +66,13 @@ def translate_subtitles(srt_path: str, target_language: str, try_times: int = 5)
     :param try_times: 重试次数，默认为 5 次。
     :return: 翻译后字幕文件的路径。
     """
+    srt_path_english = srt_path.replace("_zh", f"_{target_language}")
+    if os.path.exists(srt_path_english):
+        return srt_path_english
+
     with open(srt_path, "r", encoding="utf-8") as f:
         subtitles = f.read().strip()
     srt = pysrt.open(srt_path)
-    srt_path = srt_path.replace("_zh", f"_{target_language}")
 
     lines = len(subtitles.split("\n"))
     for i in range(try_times):
@@ -79,9 +83,9 @@ def translate_subtitles(srt_path: str, target_language: str, try_times: int = 5)
             elif not check_timeline(srt, translated_subtitles):
                 print(f"chatgpt translate timeline not match, try again! {i + 1}")
             else:
-                with open(srt_path, "w") as f:
+                with open(srt_path_english, "w") as f:
                     f.write(translated_subtitles)
-                return srt_path
+                return srt_path_english
         time.sleep(1)
 
     return srt_path

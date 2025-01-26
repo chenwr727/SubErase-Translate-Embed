@@ -30,16 +30,36 @@
 
 2. **安装依赖包**：
     ```bash
+    conda create -n ste python=3.10
+    conda activate ste
+    pip install paddlepaddle-gpu==2.6.1.post120 -f https://www.paddlepaddle.org.cn/whl/linux/mkl/avx/stable.html
     pip install -r requirements.txt
     ```
 
 3. **下载模型**:
-    - [PaddleOCR](https://paddleocr.bj.bcebos.com/PP-OCRv4/chinese/ch_PP-OCRv4_det_server_infer.tar)
+    - PaddleOCR
+        - [det](https://paddleocr.bj.bcebos.com/PP-OCRv4/chinese/ch_PP-OCRv4_det_server_infer.tar)
+        - [rec](https://paddleocr.bj.bcebos.com/PP-OCRv4/chinese/ch_PP-OCRv4_rec_server_infer.tar)
     - [STTN](https://drive.google.com/file/d/1ZAMV8547wmZylKRt5qR_tC5VlosXD4Wv/view?usp=sharing)
+    
+    将模型文件保存到 `./models` 目录下，结构如下：
+    ```
+    models
+    ├── ch_PP-OCRv4_det_server_infer
+    └── ch_PP-OCRv4_rec_server_infer
+    └── sttn.pth
+    ```
 
 4. **配置文件**：
     ```bash
     cp config-template.yaml config.yaml
+    ```
+
+5. **应用安装**：
+    ```bash
+    sudo apt install imagemagick
+    conda install -c conda-forge ffmpeg
+    conda install -c conda-forge gcc=12.2.0
     ```
 
 ## 使用方法

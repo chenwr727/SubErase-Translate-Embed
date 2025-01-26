@@ -6,6 +6,7 @@ from modules.config import load_config
 from modules.embed import embed_subtitles
 from modules.erase import remove_subtitles
 from modules.ocr import extract_subtitles
+from modules.subtitle import get_subtitles
 from modules.translate import translate_subtitles
 from utils.logging_utils import update_status
 from utils.video_utils import (
@@ -47,8 +48,10 @@ def main():
 
     # 使用 OCR 提取字幕
     update_status("OCR: extracting subtitles...")
-    srt_path = f"{file_name}_zh_ocr.srt"
-    ocr_result, y_center = extract_subtitles(frame_paths, config, fps, srt_path)
+    ocr_result, y_center = extract_subtitles(frame_paths, config, fps)
+
+    # 生成字幕
+    srt_path = get_subtitles(ocr_result, config, fps, file_name)
 
     # 擦除原有字幕
     update_status("Erase: removing subtitles...")
@@ -69,7 +72,7 @@ def main():
         if os.path.exists(file_name):
             shutil.rmtree(file_name)
             update_status("Temporary request directory {} deleted".format(file_name))
-        
+
     update_status(f"Done! {args.video}")
 
 

@@ -1,5 +1,5 @@
 import pysrt
-from moviepy.editor import CompositeVideoClip, TextClip, VideoFileClip
+from moviepy import CompositeVideoClip, TextClip, VideoFileClip
 from pysrt.srtfile import SubRipFile, SubRipItem
 
 
@@ -26,13 +26,14 @@ def create_subclip(
     start_time = sub.start.ordinal / 1000.0
     end_time = sub.end.ordinal / 1000.0
     txtclip = TextClip(
-        sub.text,
-        fontsize=fontsize,
         font=font,
+        text=sub.text,
+        font_size=fontsize,
         color=font_color,
+        text_align="center",
     )
-    txtclip = txtclip.set_pos(("center", position - txtclip.size[1] // 2))
-    return txtclip.set_start(start_time).set_duration(end_time - start_time)
+    txtclip = txtclip.with_position(("center", position - txtclip.size[1] // 2))
+    return txtclip.with_start(start_time).with_duration(end_time - start_time)
 
 
 def estimate_font_size(target_subtitle_width: int):
@@ -68,7 +69,7 @@ def get_textclip_len(text: str, fontsize: int, font: str):
     返回值:
     int - 文本剪辑的宽度。
     """
-    txtclip = TextClip(text, fontsize=fontsize, font=font)
+    txtclip = TextClip(font=font, text=text, font_size=fontsize)
     return txtclip.size[0]
 
 

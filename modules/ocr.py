@@ -8,13 +8,12 @@ from paddleocr import PaddleOCR
 from tqdm import tqdm
 
 from utils.image_utils import load_img_to_array
-from utils.subtitle_utils import create_srt_entry
 
 logging.disable(logging.DEBUG)
 logging.disable(logging.WARNING)
 
 
-def extract_subtitles(frame_paths: List[str], config: dict, fps: float, srt_path: str):
+def extract_subtitles(frame_paths: List[str], config: dict, fps: float):
     """
     从视频帧中提取字幕。
 
@@ -24,7 +23,6 @@ def extract_subtitles(frame_paths: List[str], config: dict, fps: float, srt_path
     - frame_paths: 视频帧的文件路径列表。
     - config: 配置字典，包含OCR和字幕提取的配置信息。
     - fps: 视频的帧率，用于时间计算。
-    - srt_path: 生成的SRT文件的路径。
 
     返回:
     - subtitles: 字幕文本。
@@ -43,10 +41,6 @@ def extract_subtitles(frame_paths: List[str], config: dict, fps: float, srt_path
     ocr_result, center = check_ocr_result(ocr_result, config, fps, frame_paths[0])
     save_ocr_result(ocr_result, f"{file_name}_ocr_check.json")
 
-    subtitles = get_subtitles(ocr_result, config, fps)
-    with open(srt_path, "w") as file:
-        file.write(subtitles)
-
     return ocr_result, center
 
 
@@ -63,6 +57,48 @@ def save_ocr_result(ocr_result: dict, ocr_path: str):
     """
     with open(ocr_path, "w") as f:
         json.dump(ocr_result, f, ensure_ascii=False, indent=4)
+
+
+def sort_ocr_result(ocr_result: List[List]):
+    """
+    对OCR识别结果进行排序，以确定文本的垂直位置。
+    """
+    result = []
+    for line in ocr_result:
+        coords, _ = line
+        x, y = 0, 0
+        min_y = 10000
+        max_y = 0
+
+        for coord in coords:
+            x += coord[0]
+            y += coord[1]
+            min_y = min(min_y, coord[1])
+            max_y = max(max_y, coord[1])
+
+        center_x = x / len(coords)
+        center_y = y / len(coords)
+        height = max_y - min_y
+
+        result.append([center_x, center_y, height])
+
+    y_groups = {}
+    for i, (center_x, center_y, height) in enumerate(result):
+        found_group = False
+        for group_y in y_groups:
+            if abs(center_y - group_y) <= height / 3:
+                y_groups[group_y].append((i, center_x))
+                found_group = True
+                break
+        if not found_group:
+            y_groups[center_y] = [(i, center_x)]
+
+    sorted_ocr_result = []
+    for group_y in sorted(y_groups.keys()):
+        sorted_group = sorted(y_groups[group_y], key=lambda x: x[1])
+        sorted_ocr_result.extend([ocr_result[i] for i, _ in sorted_group])
+
+    return sorted_ocr_result
 
 
 def get_ocr_result(ocr: PaddleOCR, frame_paths: List[str]):
@@ -83,7 +119,7 @@ def get_ocr_result(ocr: PaddleOCR, frame_paths: List[str]):
         result = results[0]
         if result is None:
             continue
-        result = sorted(result, key=lambda x: x[0][0][1])
+        result = sort_ocr_result(result)
         for idx, line in enumerate(result):
             coords, texts = line
             x1, y1 = coords[0]
@@ -161,12 +197,7 @@ def check_ocr_result(ocr_result: dict, config: dict, fps: float, frame_path: str
                         max(xmax, xmax_),
                         max(ymax, ymax_),
                     ]
-                    if xmin >= xmax_:
-                        new_ocr_result[frame_path]["text"] += value["text"]
-                    else:
-                        new_ocr_result[frame_path]["text"] = (
-                            value["text"] + new_ocr_result[frame_path]["text"]
-                        )
+                    new_ocr_result[frame_path]["text"] += value["text"]
 
     ocr_result = new_ocr_result.copy()
     new_ocr_result = {}
@@ -181,67 +212,19 @@ def check_ocr_result(ocr_result: dict, config: dict, fps: float, frame_path: str
             center - y_delta < y_center < center + y_delta
             and x_center_frame - x_delta <= x_center <= x_center_frame + x_delta
         ):
-            new_ocr_result[frame_path] = value
             frame_number = int(os.path.splitext(os.path.basename(frame_path))[0])
             text = value["text"]
             if text == text_pre and frame_number - frame_number_pre <= frames:
                 for i in range(frame_number_pre + 1, frame_number):
                     frame_path_ = os.path.join(
                         os.path.split(frame_path)[0],
-                        f"{i:04d}",
-                        os.path.splitext(frame_path)[-1],
+                        f"{i:04d}{os.path.splitext(frame_path)[-1]}",
                     )
                     new_ocr_result[frame_path_] = value
+            new_ocr_result[frame_path] = value
             frame_number_pre = frame_number
             text_pre = text
     return new_ocr_result, center
-
-
-def get_subtitles(ocr_result: dict, config: dict, fps: float):
-    """
-    根据OCR结果生成字幕文件。
-
-    本函数通过分析OCR识别结果，根据配置和视频帧率，生成符合SRT格式的字幕文本。
-    主要逻辑是通过比较相邻帧的文本内容，来确定字幕的开始和结束帧。
-
-    参数:
-    - ocr_result: dict, 每一帧的OCR识别结果，包含文本信息。
-    - config: dict, 视频处理的配置信息，包括视频最小持续时间等。
-    - fps: float, 视频的帧率。
-
-    返回:
-    - str, 符合SRT格式的字幕文本。
-    """
-    frame_number_pre = 0
-    text_pre = None
-    subtitle_list = []
-    subtitle = {}
-    frames = fps * config["video"]["min_duration"]
-    for frame_path, value in tqdm(ocr_result.items(), desc="OCR subtitle"):
-        frame_number = int(os.path.splitext(os.path.basename(frame_path))[0])
-        text = value["text"]
-        if text == text_pre and frame_number - frame_number_pre == 1:
-            subtitle["end"] = frame_number
-        else:
-            if subtitle:
-                if subtitle["end"] - subtitle["start"] > frames:
-                    subtitle_list.append(
-                        create_srt_entry(subtitle, len(subtitle_list) + 1, fps)
-                    )
-            subtitle = {
-                "start": frame_number,
-                "end": frame_number,
-                "text": text,
-            }
-        frame_number_pre = frame_number
-        text_pre = text
-
-    if subtitle:
-        if subtitle["end"] - subtitle["start"] > frames:
-            subtitle_list.append(
-                create_srt_entry(subtitle, len(subtitle_list) + 1, fps)
-            )
-    return "\n".join(subtitle_list)
 
 
 def get_groups_mean(arr: list, tolerance=20):

@@ -30,16 +30,36 @@ To use SubErase-Translate-Embed, follow these steps:
 
 2. **Install dependencies**:
     ```bash
+    conda create -n ste python=3.10
+    conda activate ste
+    pip install paddlepaddle-gpu==2.6.1.post120 -f https://www.paddlepaddle.org.cn/whl/linux/mkl/avx/stable.html
     pip install -r requirements.txt
     ```
 
 3. **Download models**:
-    - [PaddleOCR](https://paddleocr.bj.bcebos.com/PP-OCRv4/chinese/ch_PP-OCRv4_det_server_infer.tar)
+    - PaddleOCR
+        - [det](https://paddleocr.bj.bcebos.com/PP-OCRv4/chinese/ch_PP-OCRv4_det_server_infer.tar)
+        - [rec](https://paddleocr.bj.bcebos.com/PP-OCRv4/chinese/ch_PP-OCRv4_rec_server_infer.tar)
     - [STTN](https://drive.google.com/file/d/1ZAMV8547wmZylKRt5qR_tC5VlosXD4Wv/view?usp=sharing)
+
+    Save the model files to the `./models` directory with the following structure:
+    ```
+    models
+    ├── ch_PP-OCRv4_det_server_infer
+    └── ch_PP-OCRv4_rec_server_infer
+    └── sttn.pth
+    ```
 
 4. **Configuration**:
     ```bash
     cp config-template.yaml config.yaml
+    ```
+
+5. **Application Installation**:
+    ```bash
+    sudo apt install imagemagick
+    conda install -c conda-forge ffmpeg
+    conda install -c conda-forge gcc=12.2.0
     ```
 
 ## Usage

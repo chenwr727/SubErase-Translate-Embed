@@ -23,7 +23,7 @@ erase:
 translation:
   model: "gpt-4o-mini"
   api_key: "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  api_base_url: "https://api.chatanywhere.com.cn/v1"
+  api_base_url: "https://api.chatanywhere.tech/v1"
 
 # 字幕处理配置
 subtitle:
