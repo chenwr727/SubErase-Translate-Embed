@@ -1,0 +1,3 @@
+[submodule "STTN"]
+	path = STTN
+	url = https://github.com/researchmm/STTN.git
