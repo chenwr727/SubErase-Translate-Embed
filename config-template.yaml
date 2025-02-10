@@ -10,6 +10,8 @@ ocr:
   lang: "ch" # OCR 识别语言
   det_model_dir: "./models/ch_PP-OCRv4_det_server_infer" # OCR 检测模型
   rec_model_dir: "./models/ch_PP-OCRv4_rec_server_infer" # OCR 识别模型
+  min_height_ratio: 0.0 # 检测字幕的最小高度占比
+  max_height_ratio: 1.0 # 检测字幕的最大高度占比
 
 # 字幕擦除配置
 erase:

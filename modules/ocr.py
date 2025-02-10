@@ -35,7 +35,7 @@ def extract_subtitles(frame_paths: List[str], config: dict, fps: float):
         det_model_dir=config["ocr"]["det_model_dir"],
         rec_model_dir=config["ocr"]["rec_model_dir"],
     )
-    ocr_result = get_ocr_result(ocr, frame_paths)
+    ocr_result = get_ocr_result(ocr, frame_paths, config)
     save_ocr_result(ocr_result, f"{file_name}_ocr.json")
 
     ocr_result, center = check_ocr_result(ocr_result, config, fps, frame_paths[0])
@@ -101,21 +101,26 @@ def sort_ocr_result(ocr_result: List[List]):
     return sorted_ocr_result
 
 
-def get_ocr_result(ocr: PaddleOCR, frame_paths: List[str]):
+def get_ocr_result(ocr: PaddleOCR, frame_paths: List[str], config: dict):
     """
     对一系列图像帧进行OCR识别，提取并整理文本信息及其在图像中的位置。
 
     参数:
     ocr: PaddleOCR对象，用于执行OCR识别。
     frame_paths: 图像帧的文件路径列表。
+    config: 配置字典，包含OCR和字幕提取的配置信息。
 
     返回:
     包含每帧中识别到的文本及其位置信息的字典。
     """
+    img_array = load_img_to_array(frame_paths[0])
+    min_height = int(img_array.shape[0] * config["ocr"]["min_height_ratio"])
+    max_height = int(img_array.shape[0] * config["ocr"]["max_height_ratio"])
+
     ocr_result = {}
     for frame_path in tqdm(frame_paths, desc="OCR"):
         img_array = load_img_to_array(frame_path)
-        results = ocr.ocr(img_array, cls=False, det=True, rec=True)
+        results = ocr.ocr(img_array[min_height:max_height, :, :], cls=False, det=True, rec=True)
         result = results[0]
         if result is None:
             continue
@@ -129,8 +134,8 @@ def get_ocr_result(ocr: PaddleOCR, frame_paths: List[str]):
 
             xmin = int(max(x1, x4))
             xmax = int(min(x2, x3))
-            ymin = int(max(y1, y2))
-            ymax = int(min(y3, y4))
+            ymin = int(max(y1, y2)) + min_height
+            ymax = int(min(y3, y4)) + min_height
 
             text = texts[0]
             ocr_result[frame_path + f",{idx}"] = {
