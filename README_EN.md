@@ -1,34 +1,66 @@
-English | [简体中文](README.md)
+[简体中文](README.md) | English
 
-# SubErase-Translate-Embed
+<div align="center">
+    <h1>SubErase-Translate-Embed</h1>
+    <p>🎬 All-in-One Video Subtitle Processing Solution</p>
+    <p>
+        <img src="https://img.shields.io/badge/license-MIT-green" alt="license">
+        <img src="https://img.shields.io/github/stars/chenwr727/SubErase-Translate-Embed" alt="stars">
+        <img src="https://img.shields.io/github/forks/chenwr727/SubErase-Translate-Embed" alt="forks">
+    </p>
+</div>
 
-## Project Overview
+## ✨ Overview
 
-**SubErase-Translate-Embed** is an open-source tool designed to enhance the accessibility of multilingual video content. By integrating OCR technology, subtitle erasure, translation, and embedding functions, this tool automatically processes subtitles in short films, enabling users to easily experience short film content in different languages.
+SubErase-Translate-Embed is a powerful open-source tool that simplifies multilingual video content creation. Using advanced AI technology, it automates the entire process of subtitle detection, removal, translation, and embedding.
 
-This project provides a one-stop solution for users who wish to translate videos into multiple languages and re-embed the subtitles. It is widely applicable in scenarios such as multilingual education, international film production, and global audience entertainment experiences.
+### Why Choose SubErase-Translate-Embed?
 
-![Demo](demo.webp)
+- 🚀 **Fully Automated**: One-click solution from subtitle extraction to embedding
+- 🎯 **High Accuracy**: Precise subtitle recognition powered by PaddleOCR
+- ✨ **Perfect Removal**: Natural subtitle removal using STTN technology
+- 🌍 **Multilingual**: Support for multiple language translations
+- 🛠️ **User-Friendly**: Easy-to-use command-line interface
 
-## Key Features
+## 🎥 Demo
 
-- **Subtitle Recognition**: Uses OCR technology (based on PaddleOCR) to extract subtitles from videos.
-- **Subtitle Erasure**: Automatically erases the original subtitles in the video using STTN (Spatio-Temporal Trajectory Network).
-- **Subtitle Translation**: Utilizes OpenAI's ChatGPT API or other translation services to translate the extracted subtitles into the target language.
-- **Subtitle Embedding**: Re-embeds the translated subtitles into the video, generating a new multilingual version.
+<div align="center">
+    <img src="demo.webp" alt="Demo" width="80%">
+    <p><em>Left: Original Video | Right: Processed Video</em></p>
+</div>
 
-## Installation Guide
+## 🚀 Key Features
 
-To use SubErase-Translate-Embed, follow these steps:
+- **Intelligent Subtitle Recognition**:
+  - High-precision text recognition with PaddleOCR
+  - Support for various fonts and complex backgrounds
+  - Automatic subtitle position and timestamp detection
 
-1. **Clone the project code**:
+- **Professional Subtitle Removal**:
+  - Smart restoration using STTN technology
+  - Seamless removal with natural results
+  - Complex background handling
+
+- **High-Quality Translation**:
+  - Integration with ChatGPT API for accurate translations
+  - Preservation of original context and expression
+  - Support for multiple language pairs
+
+- **Precise Subtitle Embedding**:
+  - Customizable subtitle styles
+  - Intelligent position adjustment
+  - Smooth transition effects
+
+## 🔧 Installation
+
+Follow these steps to set up SubErase-Translate-Embed:
+
+1. **Clone the Repository**:
     ```bash
-    git clone https://github.com/chenwr727/SubErase-Translate-Embed.git
-    cd SubErase-Translate-Embed
-    git clone https://github.com/researchmm/STTN.git
+    git clone --recursive https://github.com/chenwr727/SubErase-Translate-Embed.git
     ```
 
-2. **Install dependencies**:
+2. **Install Dependencies**:
     ```bash
     conda create -n ste python=3.10
     conda activate ste
@@ -36,13 +68,13 @@ To use SubErase-Translate-Embed, follow these steps:
     pip install -r requirements.txt
     ```
 
-3. **Download models**:
+3. **Download Models**:
     - PaddleOCR
         - [det](https://paddleocr.bj.bcebos.com/PP-OCRv4/chinese/ch_PP-OCRv4_det_server_infer.tar)
         - [rec](https://paddleocr.bj.bcebos.com/PP-OCRv4/chinese/ch_PP-OCRv4_rec_server_infer.tar)
     - [STTN](https://drive.google.com/file/d/1ZAMV8547wmZylKRt5qR_tC5VlosXD4Wv/view?usp=sharing)
-
-    Save the model files to the `./models` directory with the following structure:
+    
+    Save the model files in the `./models` directory with the following structure:
     ```
     models
     ├── ch_PP-OCRv4_det_server_infer
@@ -55,30 +87,34 @@ To use SubErase-Translate-Embed, follow these steps:
     cp config-template.yaml config.yaml
     ```
 
-5. **Application Installation**:
+5. **Install Applications**:
     ```bash
     sudo apt install imagemagick
     conda install -c conda-forge ffmpeg
     conda install -c conda-forge gcc=12.2.0
     ```
 
-## Usage
+## 📖 Usage
 
-Execute video processing with the following command, automatically recognizing, erasing, translating, and embedding subtitles:
+Process your video with a single command:
 
 ```bash
 python main.py --video input_video.mp4 --language English
 ```
-Where `input_video.mp4` is the name of your video file, and `English` is the target translation language.
 
-## Project Structure
+For advanced configuration options, refer to `config.yaml`.
 
-- **main.py**: The main program entry point, responsible for managing the entire processing workflow.
-- **modules/**: Contains various functional modules (OCR, subtitle erasure, translation, embedding).
-- **utils/**: Contains general tools, such as logging and video processing utilities.
-- **config.yaml**: Configuration file for setting language, video format, and other parameters.
+## 🤝 Contributing
 
-## References
+We welcome all forms of contributions, whether it's new features, bug fixes, or documentation improvements. Please check our contribution guidelines for details.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+Thanks to these amazing projects:
 
 - [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
 - [STTN](https://github.com/researchmm/STTN)

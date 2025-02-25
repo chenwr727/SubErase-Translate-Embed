@@ -1,31 +1,63 @@
 简体中文 | [English](README_EN.md)
 
-# SubErase-Translate-Embed
+<div align="center">
+    <h1>SubErase-Translate-Embed</h1>
+    <p>🎬 一站式视频字幕处理解决方案</p>
+    <p>
+        <img src="https://img.shields.io/badge/license-MIT-green" alt="license">
+        <img src="https://img.shields.io/github/stars/chenwr727/SubErase-Translate-Embed" alt="stars">
+        <img src="https://img.shields.io/github/forks/chenwr727/SubErase-Translate-Embed" alt="forks">
+    </p>
+</div>
 
-## 项目简介
+## ✨ 项目亮点
 
-**SubErase-Translate-Embed** 是一个开源工具，旨在提升多语言视频内容的可访问性。该工具通过集成 OCR 技术、字幕擦除、翻译与嵌入功能，实现对短剧视频中字幕的自动处理，使用户能够方便地体验不同语言版本的短剧内容。
+SubErase-Translate-Embed 是一款强大的开源工具，让多语言视频内容制作变得简单高效。通过先进的 AI 技术，自动完成字幕识别、擦除、翻译与重新嵌入的全流程处理。
 
-本项目为希望将视频翻译成多种语言并重新嵌入字幕的用户提供了一站式解决方案，广泛应用于多语言教学、国际化影视制作、全球观众娱乐体验等场景。
+### 为什么选择 SubErase-Translate-Embed？
 
-![Demo](demo.webp)
+- 🚀 **全自动处理**：从字幕提取到重新嵌入，一键完成
+- 🎯 **高精度识别**：基于 PaddleOCR 的准确字幕识别
+- ✨ **完美擦除**：采用 STTN 技术，字幕擦除自然流畅
+- 🌍 **多语言支持**：支持多种语言之间的互译
+- 🛠️ **简单易用**：友好的命令行界面，轻松上手
 
-## 主要功能
+## 🎥 效果展示
 
-- **字幕识别**：使用 OCR 技术（基于 PaddleOCR）从视频中提取字幕。
-- **字幕擦除**：借助 STTN（基于时空轨迹网络）技术，自动擦除原视频中的字幕。
-- **字幕翻译**：利用 OpenAI 的 ChatGPT API 或其他翻译服务，将提取的字幕翻译为目标语言。
-- **字幕嵌入**：将翻译后的字幕重新嵌入视频，生成新的多语言版本。
+<div align="center">
+    <img src="demo.webp" alt="Demo" width="80%">
+    <p><em>左：原始视频 | 右：处理后的视频</em></p>
+</div>
 
-## 安装指南
+## 🚀 主要功能
+
+- **智能字幕识别**：
+  - 基于 PaddleOCR 的高精度文字识别
+  - 支持多种字体和复杂背景
+  - 自动检测字幕位置和时间戳
+
+- **专业字幕擦除**：
+  - 基于 STTN 的智能修复技术
+  - 无痕擦除，画面自然
+  - 支持复杂背景处理
+
+- **高质量翻译**：
+  - 接入 ChatGPT API，确保翻译准确性
+  - 保持原文语境和表达方式
+  - 支持多语言互译
+
+- **精准字幕嵌入**：
+  - 自定义字幕样式
+  - 智能位置调整
+  - 平滑过渡效果
+
+## 🔧 安装指南
 
 要使用 SubErase-Translate-Embed，请按照以下步骤操作：
 
 1. **克隆项目代码**：
     ```bash
-    git clone https://github.com/chenwr727/SubErase-Translate-Embed.git
-    cd SubErase-Translate-Embed
-    git clone https://github.com/researchmm/STTN.git
+    git clone --recursive https://github.com/chenwr727/SubErase-Translate-Embed.git
     ```
 
 2. **安装依赖包**：
@@ -62,23 +94,27 @@
     conda install -c conda-forge gcc=12.2.0
     ```
 
-## 使用方法
+## 📖 使用方法
 
-通过以下命令执行视频处理，自动识别、擦除、翻译并嵌入字幕：
+只需一行命令，即可完成视频字幕的全流程处理：
 
 ```bash
 python main.py --video input_video.mp4 --language English
 ```
-其中 `input_video.mp4` 是你的视频文件名，`English` 是目标翻译语言代码。
 
-## 项目结构
+更多高级配置选项，请参考 `config.yaml`。
 
-- **main.py**：主程序入口，负责管理整个处理流程。
-- **modules/**：包含各个功能模块（OCR、擦除字幕、翻译、嵌入字幕）。
-- **utils/**：包含通用工具，如日志记录、视频处理工具等。
-- **config.yaml**：配置文件，用于设置语言、视频格式等参数。
+## 🤝 参与贡献
 
-## 参考项目
+我们欢迎任何形式的贡献，无论是新功能、bug 修复还是文档改进。请查看我们的贡献指南了解详情。
+
+## 📄 开源协议
+
+本项目采用 MIT 协议开源，详见 [LICENSE](LICENSE) 文件。
+
+## 🙏 致谢
+
+感谢以下开源项目的贡献：
 
 - [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
 - [STTN](https://github.com/researchmm/STTN)
